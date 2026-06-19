@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — avinash.ai</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="profile-body">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-mark">A</div>
+      <span>avinash.ai</span>
+    </div>
+    <nav>
+      <a href="/chat.html">Chat</a>
+      <a href="#" id="logout">Log out</a>
+    </nav>
+  </header>
+
+  <div class="profile-wrap">
+    <main class="profile-card">
+      <h1>Your profile</h1>
+      <p class="subtitle">
+        Changes here apply to all future chats. Your AI assistant
+        references this profile on every message.
+      </p>
+
+      <form id="profile-form">
+        <label>
+          Name
+          <input type="text" name="name" required />
+        </label>
+        <label>
+          Age
+          <input type="number" name="age" min="1" max="120" />
+        </label>
+        <label>
+          Goals
+          <textarea name="goals" rows="2"></textarea>
+        </label>
+        <label>
+          Health notes / conditions
+          <textarea name="healthNotes" rows="2"></textarea>
+        </label>
+        <label>
+          Activity level
+          <select name="activityLevel">
+            <option value="">— Select —</option>
+            <option value="sedentary">Sedentary</option>
+            <option value="light">Lightly active</option>
+            <option value="moderate">Moderately active</option>
+            <option value="very_active">Very active</option>
+            <option value="athlete">Athlete</option>
+          </select>
+        </label>
+        <label>
+          Diet preferences
+          <textarea name="dietPreferences" rows="2"></textarea>
+        </label>
+        <label>
+          Anything else we should know?
+          <textarea name="anythingElse" rows="3"></textarea>
+        </label>
+
+        <button type="submit" class="primary">Save</button>
+        <p id="status" class="status"></p>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    const formEl   = document.getElementById('profile-form');
+    const statusEl = document.getElementById('status');
+
+    async function loadProfile() {
+      const res = await fetch('/api/profile');
+      if (res.status === 401) {
+        window.location.href = '/login.html';
+        return;
+      }
+      const { profile, updatedAt } = await res.json();
+      const p = profile || {};
+      formEl.name.value             = p.name             || '';
+      formEl.age.value              = p.age              || '';
+      formEl.goals.value            = p.goals            || '';
+      formEl.healthNotes.value      = p.healthNotes      || '';
+      formEl.activityLevel.value    = p.activityLevel    || '';
+      formEl.dietPreferences.value  = p.dietPreferences  || '';
+      formEl.anythingElse.value     = p.anythingElse     || '';
+      if (updatedAt) {
+        statusEl.textContent = 'Last updated: ' + updatedAt + ' UTC';
+      }
+    }
+
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(formEl).entries());
+      const profile = {
+        name:            data.name,
+        age:             data.age ? Number(data.age) : null,
+        goals:           data.goals,
+        healthNotes:     data.healthNotes,
+        activityLevel:   data.activityLevel,
+        dietPreferences: data.dietPreferences,
+        anythingElse:    data.anythingElse
+      };
+      statusEl.textContent = 'Saving…';
+      try {
+        const res = await fetch('/api/profile', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile })
+        });
+        if (res.ok) {
+          statusEl.textContent = 'Saved ✓';
+          setTimeout(() => { statusEl.textContent = ''; }, 2000);
+          loadProfile();
+        } else {
+          const json = await res.json();
+          statusEl.textContent = '⚠️ ' + (json.error || 'Save failed.');
+        }
+      } catch (err) {
+        statusEl.textContent = '⚠️ Network error.';
+      }
+    });
+
+    document.getElementById('logout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login.html';
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>

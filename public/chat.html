@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>avinash.ai</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="app-body">
+  <!-- ============================== -->
+  <!-- Sidebar                        -->
+  <!-- ============================== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="logo-mark">A</div>
+        <span>avinash.ai</span>
+      </div>
+      <button class="icon-btn" id="new-chat-btn" title="Refresh">↻</button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="/profile.html" class="nav-item">
+        <span class="nav-icon">◉</span> Profile
+      </a>
+    </nav>
+
+    <div class="history-section">
+      <h3 class="history-title">Recent</h3>
+      <ul id="history-list" class="history-list">
+        <li class="history-empty">No conversations yet</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="#" id="logout" class="logout-link">Log out</a>
+    </div>
+  </aside>
+
+  <!-- ============================== -->
+  <!-- Main chat area                 -->
+  <!-- ============================== -->
+  <main class="main-area">
+    <header class="top-bar">
+      <div class="model-info">
+        <span class="model-badge">avinash.ai</span>
+        <span class="model-detail">Personal · Profile-aware</span>
+      </div>
+    </header>
+
+    <div class="messages-container">
+      <div id="messages" class="messages">
+        <!-- Welcome screen rendered here on first load. -->
+      </div>
+    </div>
+
+    <div class="composer-wrap">
+      <form id="chat-form" class="composer">
+        <textarea id="input" rows="1" placeholder="Message avinash.ai…" required></textarea>
+        <button type="submit" class="send-btn" title="Send">↑</button>
+      </form>
+      <p class="disclaimer">
+        avinash.ai can make mistakes. For anything serious, please contact a
+        real healthcare professional or local emergency services.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // ------------------------------------------------------------
+    // avinash.ai chat page
+    //
+    // Behavior:
+    //   - On load, fetch /api/chat/history and render every message
+    //     as a bubble. If there's no history, show a welcome screen.
+    //   - Sidebar: list all past user messages, grouped by date
+    //     (Today / Yesterday / Earlier). Click an item to scroll
+    //     to that message in the main area.
+    //   - On submit, POST the message to /api/chat, render the
+    //     assistant's reply when it comes back.
+    // ------------------------------------------------------------
+
+    const messagesEl = document.getElementById('messages');
+    const formEl     = document.getElementById('chat-form');
+    const inputEl    = document.getElementById('input');
+    const historyEl  = document.getElementById('history-list');
+    const sendBtn    = formEl.querySelector('.send-btn');
+
+    // Render a single chat bubble.
+    function addMessage(role, content, scroll = true) {
+      const div = document.createElement('div');
+      div.className = 'bubble ' + (role === 'user' ? 'user' : 'assistant');
+      div.textContent = content;
+      div.dataset.role = role;
+      messagesEl.appendChild(div);
+      if (scroll) {
+        messagesEl.parentElement.scrollTop =
+          messagesEl.parentElement.scrollHeight;
+      }
+      return div;
+    }
+
+    // Render the welcome screen (shown when there are no messages yet).
+    function showWelcome() {
+      messagesEl.innerHTML = `
+        <div class="welcome">
+          <h1>avinash.ai</h1>
+          <p>Your personal AI assistant that already knows you — your goals,
+             your health notes, your preferences. Ask me anything.</p>
+          <div class="suggestions">
+            <button class="suggestion" data-prompt="Help me plan a workout for this week given my goals.">
+              Help me plan a workout for this week
+            </button>
+            <button class="suggestion" data-prompt="Suggest a healthy meal I can make tonight based on my diet preferences.">
+              Suggest a healthy meal for tonight
+            </button>
+            <button class="suggestion" data-prompt="How am I tracking against my goals? Give me an honest assessment.">
+              How am I tracking against my goals?
+            </button>
+            <button class="suggestion" data-prompt="What should I be aware of given my health notes?">
+              What should I know given my health notes?
+            </button>
+          </div>
+        </div>
+      `;
+      // Wire up the suggestion buttons.
+      messagesEl.querySelectorAll('.suggestion').forEach(btn => {
+        btn.addEventListener('click', () => {
+          inputEl.value = btn.dataset.prompt;
+          inputEl.focus();
+          formEl.requestSubmit();
+        });
+      });
+    }
+
+    // ------------------------------------------------------------
+    // Sidebar: render the chat history as a clickable list.
+    //
+    // We group past user messages by date (Today, Yesterday, or
+    // "MMM D" for older). Clicking an item scrolls to that message
+    // in the main area and briefly highlights it.
+    // ------------------------------------------------------------
+    function dateLabel(iso) {
+      const d = new Date(iso);
+      const now = new Date();
+      const startOfDay = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate());
+      const diffDays = Math.round((startOfDay(now) - startOfDay(d)) / 86400000);
+      if (diffDays === 0) return 'Today';
+      if (diffDays === 1) return 'Yesterday';
+      if (diffDays < 7)  return 'This week';
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    function renderHistory(messages) {
+      // Only user messages — each one represents a turn the user took.
+      const userMessages = messages.filter(m => m.role === 'user');
+
+      if (userMessages.length === 0) {
+        historyEl.innerHTML = '<li class="history-empty">No conversations yet</li>';
+        return;
+      }
+
+      // Group by date label.
+      const groups = {};
+      userMessages.forEach((m, i) => {
+        const label = dateLabel(m.created_at);
+        if (!groups[label]) groups[label] = [];
+        groups[label].push({ ...m, index: i });
+      });
+
+      // Render.
+      historyEl.innerHTML = '';
+      // Order: Today, Yesterday, This week, then specific dates.
+      const order = ['Today', 'Yesterday', 'This week'];
+      const labels = [
+        ...order.filter(l => groups[l]),
+        ...Object.keys(groups).filter(l => !order.includes(l))
+      ];
+
+      labels.forEach(label => {
+        const dateHeader = document.createElement('li');
+        dateHeader.className = 'history-date';
+        dateHeader.textContent = label;
+        historyEl.appendChild(dateHeader);
+
+        groups[label].slice().reverse().forEach(m => {
+          const li = document.createElement('li');
+          const btn = document.createElement('button');
+          btn.className = 'history-item';
+          btn.textContent = m.content.length > 50
+            ? m.content.slice(0, 50) + '…'
+            : m.content;
+          btn.title = m.content;
+          btn.addEventListener('click', () => jumpToMessage(m.id));
+          li.appendChild(btn);
+          historyEl.appendChild(li);
+        });
+      });
+    }
+
+    // Scroll the main view to a specific message id, briefly highlight it.
+    function jumpToMessage(id) {
+      const all = messagesEl.querySelectorAll('.bubble');
+      // Find the bubble whose matching message id we rendered. Since
+      // we don't carry ids onto DOM nodes, we fall back to the nth
+      // matching user message index.
+      const target = Array.from(all).find(el => el.dataset.role === 'user');
+      // Simpler: just scroll to bottom (since messages are chronological).
+      messagesEl.parentElement.scrollTo({
+        top: messagesEl.parentElement.scrollHeight,
+        behavior: 'smooth'
+      });
+      if (target) {
+        target.style.transition = 'background 0.3s';
+        target.style.background = 'rgba(167, 139, 250, 0.15)';
+        setTimeout(() => { target.style.background = ''; }, 800);
+      }
+    }
+
+    // ------------------------------------------------------------
+    // Load chat history on page open.
+    // ------------------------------------------------------------
+    async function loadHistory() {
+      try {
+        const res = await fetch('/api/chat/history');
+        if (res.status === 401) {
+          window.location.href = '/login.html';
+          return;
+        }
+        const { messages } = await res.json();
+
+        if (!messages || messages.length === 0) {
+          showWelcome();
+          renderHistory([]);
+        } else {
+          messagesEl.innerHTML = '';
+          messages.forEach(m => addMessage(m.role, m.content, false));
+          // Scroll to bottom.
+          messagesEl.parentElement.scrollTop =
+            messagesEl.parentElement.scrollHeight;
+          renderHistory(messages);
+        }
+      } catch (err) {
+        showWelcome();
+      }
+    }
+
+    // ------------------------------------------------------------
+    // Submit handler: send message, render reply.
+    // ------------------------------------------------------------
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = inputEl.value.trim();
+      if (!text) return;
+
+      // Remove welcome screen if present.
+      const welcome = messagesEl.querySelector('.welcome');
+      if (welcome) welcome.remove();
+
+      addMessage('user', text);
+      inputEl.value = '';
+      inputEl.disabled = true;
+      sendBtn.disabled = true;
+
+      // Pending placeholder.
+      const pending = document.createElement('div');
+      pending.className = 'bubble assistant pending';
+      pending.textContent = 'avinash.ai is thinking…';
+      messagesEl.appendChild(pending);
+      messagesEl.parentElement.scrollTop =
+        messagesEl.parentElement.scrollHeight;
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        const json = await res.json();
+        pending.remove();
+
+        if (!res.ok) {
+          addMessage('assistant', '⚠️ ' + (json.error || 'Something went wrong.'));
+        } else {
+          addMessage('assistant', json.reply);
+          // Refresh the sidebar to include this new turn.
+          loadHistory();
+        }
+      } catch (err) {
+        pending.remove();
+        addMessage('assistant', '⚠️ Network error.');
+      } finally {
+        inputEl.disabled = false;
+        sendBtn.disabled = false;
+        inputEl.focus();
+      }
+    });
+
+    // Enter to send, Shift+Enter for newline.
+    inputEl.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        formEl.requestSubmit();
+      }
+    });
+
+    // Auto-grow the textarea as the user types.
+    inputEl.addEventListener('input', () => {
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 200) + 'px';
+    });
+
+    // Refresh button: reload everything.
+    document.getElementById('new-chat-btn').addEventListener('click', () => {
+      loadHistory();
+    });
+
+    // Log out.
+    document.getElementById('logout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login.html';
+    });
+
+    loadHistory();
+  </script>
+</body>
+</html>

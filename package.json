@@ -1,0 +1,17 @@
+{
+  "name": "personal-ai-assistant",
+  "version": "1.0.0",
+  "description": "A chat app that knows your personal profile and never asks you to repeat yourself.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^11.3.0",
+    "cohere-ai": "^7.18.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-session": "^1.18.1"
+  }
+}

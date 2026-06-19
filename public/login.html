@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log in — avinash.ai</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="auth-body">
+  <main class="auth-card">
+    <div class="auth-brand">
+      <div class="logo-mark">A</div>
+      <span class="brand-text">avinash.ai</span>
+    </div>
+
+    <h1>Welcome back</h1>
+    <p class="subtitle">Log in to your avinash.ai account.</p>
+
+    <form id="login-form">
+      <label>
+        Email
+        <input type="email" name="email" required autocomplete="email" />
+      </label>
+      <label>
+        Password
+        <input type="password" name="password" required autocomplete="current-password" />
+      </label>
+      <button type="submit" class="primary">Log in</button>
+      <p id="error" class="error"></p>
+    </form>
+
+    <p class="footer-link">No account? <a href="/signup.html">Sign up</a></p>
+  </main>
+
+  <script>
+    const form  = document.getElementById('login-form');
+    const errEl = document.getElementById('error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      errEl.textContent = '';
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          errEl.textContent = json.error || 'Login failed.';
+          return;
+        }
+        window.location.href = '/chat.html';
+      } catch (err) {
+        errEl.textContent = 'Network error. Please try again.';
+      }
+    });
+  </script>
+</body>
+</html>
