@@ -173,3 +173,4 @@ background:
 | `req.session`      | A `std::unordered_map` keyed by cookie id  |
 | `bcrypt.hash`      | A one-way hash function (no decryption)    |
 | Middleware chain   | `funcA(funcB(funcC(handler(req,res))))`    |
+# Personal-Ai
