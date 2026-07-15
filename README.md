@@ -1,54 +1,79 @@
 # avinash.ai — Personal AI Assistant
 
-A small full-stack web app where every user signs up with a personal
-profile (name, age, goals, health notes, activity level, diet
-preferences, free-text "anything else"), and then chats with an AI that
-**already knows all of that** — like a doctor or trainer who's read your
-chart before you walked in.
+A full-stack personal AI assistant where every user signs up with a personal profile (name, age, goals, health notes, activity level, diet preferences, and free-form notes), then chats with an AI that **already knows all of that** — like a doctor or trainer who's read your chart before you walked in.
+
+**🔗 Live Demo:** [avinash-ai.onrender.com](https://avinash-ai.onrender.com)
+
+> ⚠️ Live on Render free tier — first load may take 30–60 seconds after inactivity. Data persistence via Turso migration coming soon.
+
+---
+
+## 🛠 Tech Stack
 
 - **Backend:** Node.js + Express
 - **Database:** SQLite (via `better-sqlite3`)
 - **Auth:** `express-session` + `bcrypt` password hashing
-- **LLM:** Cohere (`command-r-08-2024` by default) via the official SDK
-- **Frontend:** Plain HTML, CSS, and JavaScript — no framework, modern dark UI
+- **LLM:** Cohere (`command-r-08-2024`) via official SDK
+- **Frontend:** Vanilla HTML, CSS, JavaScript — no framework, modern dark UI
+- **Deployment:** Render (free tier)
 
 ---
 
-## Quick start (local dev)
+## 🎯 What This Project Taught Me
 
-You need **Node.js 18 or newer** installed (`node -v` to check).
+Built with AI-assisted development. I owned the architecture, debugged real production issues (auth flows, DB transactions, LLM provider switching from Gemini → OpenAI → Anthropic → Cohere), and shipped end-to-end.
+
+**Real problems I solved:**
+- Session management across requests
+- SQLite transaction handling for atomic chat message saves
+- LLM provider migration when APIs changed pricing/quotas
+- `better-sqlite3` compilation issues on Render (fixed by pinning Node 22.x)
+- Environment-based config for local dev vs. production
+
+---
+
+## 🚀 Quick Start (Local Development)
+
+**Prerequisites:** Node.js 22.x or newer (`node -v` to check)
 
 ```bash
-# 1. From the project folder, copy the env template and edit it
-cp .env.example .env
-# Now open .env in your editor and paste your real GEMINI_API_KEY.
+# 1. Clone the repo
+git clone https://github.com/Avinashukla960/avinash-ai.git
+cd avinash-ai
 
 # 2. Install dependencies
 npm install
 
-# 3. Run the server
+# 3. Copy env template and add your keys
+cp .env.example .env
+# Open .env and paste your COHERE_API_KEY
+
+# 4. Run the server
 npm start
 ```
 
-Then open **http://localhost:3000** in your browser. You'll be sent to
-the login page; click "Sign up" to create an account.
+Open **http://localhost:3000** — you'll land on the login page. Click "Sign up" to create an account.
 
-That's it. The SQLite database (`data.db`) is created automatically on
-first run.
-
-### Getting a Gemini API key (free)
-
-1. Go to **https://aistudio.google.com/app/apikey**
-2. Sign in with your Google account
-3. Click **"Create API key"**
-4. Copy the key (it looks like `AIza...`) into your `.env` file as
-   `GEMINI_API_KEY=...`
-
-The free tier gives you plenty of requests for personal use.
+The SQLite database (`data.db`) is created automatically on first run.
 
 ---
 
-## How it's wired together
+## 🔑 Getting a Cohere API Key (Free)
+
+1. Go to **[dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys)**
+2. Sign up for a free account
+3. Click **"Create Trial Key"** (free tier includes generous quota)
+4. Copy the key into your `.env` file:
+
+```env
+COHERE_API_KEY=your-key-here
+SESSION_SECRET=any-long-random-string
+PORT=3000
+```
+
+---
+
+## 🏗 How It's Wired Together
 
 ```
 Browser  ──HTTP──▶  Express server (server.js)
@@ -75,22 +100,21 @@ SQLite (data.db)
    └── messages  (id, user_id, role, content, created_at)
 ```
 
-### What happens on every chat message
+---
 
-1. `requireAuth` middleware checks the session cookie.
-2. The user's profile is loaded from the `profiles` table.
-3. The last 10 messages are loaded from the `messages` table.
-4. A **system prompt** is built that injects the profile as known
-   context — Gemini is told *"You already know the following about
-   the user, do not ask them to repeat any of it"*, plus a safety
-   instruction to advise real medical care for anything serious.
-5. Everything is sent to the Google Gemini API.
-6. Both the user's message and the assistant's reply are saved to the
-   `messages` table.
+## 💬 What Happens on Every Chat Message
+
+1. `requireAuth` middleware checks the session cookie
+2. User's profile is loaded from the `profiles` table
+3. Last 10 messages loaded from the `messages` table
+4. A **system prompt (preamble)** is built that injects the profile as known context — Cohere is told: *"You already know the following about the user, do not ask them to repeat any of it"* — plus safety instructions to recommend real medical care for anything serious
+5. Message + history + preamble sent to Cohere API
+6. Response streamed back
+7. Both user message and AI reply saved atomically to `messages` table
 
 ---
 
-## Project layout
+## 📁 Project Structure
 
 ```
 .
@@ -104,7 +128,7 @@ SQLite (data.db)
 ├── public/
 │   ├── signup.html        ← signup form (account + profile)
 │   ├── login.html         ← login form
-│   ├── chat.html          ← chat UI with iMessage-style bubbles
+│   ├── chat.html          ← chat UI with sidebar history
 │   ├── profile.html       ← view/edit profile
 │   └── styles.css         ← all styles
 ├── .env.example           ← template for your .env
@@ -115,62 +139,118 @@ SQLite (data.db)
 
 ---
 
-## Switching models
+## 🔄 Switching Models
 
 In `routes/chat.js`, change the `MODEL` constant near the top:
 
 ```js
-const MODEL = 'gemini-1.5-flash';   // ← change this
+const MODEL = 'command-r-08-2024';   // ← change this
 ```
 
-Available options (free tier):
-- `gemini-1.5-flash` — fast, very capable, recommended
-- `gemini-1.5-pro` — more capable, slightly slower
-- `gemini-2.0-flash` — newer, fast
+**Available Cohere models:**
+- `command-r-08-2024` — balanced, recommended (current default)
+- `command-r-plus-08-2024` — most capable, slower
+- `command-light` — fastest, lighter capability
+- `command-nightly` — experimental, latest features
 
 ---
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
-- **`Error: GEMINI_API_KEY is missing`** — you didn't put a key in
-  `.env`. Copy `.env.example` to `.env` and fill it in.
+**`Error: COHERE_API_KEY is missing`**
+→ You didn't put a key in `.env`. Copy `.env.example` to `.env` and fill it in.
 
-- **`better-sqlite3` install fails** — it needs to compile a native
-  module. On Linux install `build-essential` and `python3`; on macOS
-  install Xcode Command Line Tools (`xcode-select --install`); on
-  Windows install the Visual Studio Build Tools. Then re-run
-  `npm install`.
+**`better-sqlite3` install fails locally**
+→ It needs to compile a native module. Install build tools:
+- **Linux:** `sudo apt install build-essential python3`
+- **macOS:** `xcode-select --install`
+- **Windows:** Install Visual Studio Build Tools
+- Then re-run `npm install`
 
-- **Sessions keep logging me out** — that's normal in development; the
-  default session store is in-memory and resets whenever you restart
-  the server. For production you'd want a persistent session store.
+**Sessions keep logging me out**
+→ Normal in development. The default session store is in-memory and resets on server restart. For production, use a persistent session store (Redis, Postgres session store).
 
-- **The AI keeps asking me things I already told it** — make sure
-  you've filled out your profile at `/profile.html`. The system prompt
-  only includes what you've saved.
+**AI keeps asking things I already told it**
+→ Make sure you've filled out your profile at `/profile.html`. The system prompt only includes what you've saved.
 
-- **Health questions get blocked by safety filters** — the
-  `safetySettings` in `routes/chat.js` are loosened already
-  (`BLOCK_ONLY_HIGH`). If something still gets blocked, you can
-  change them to `BLOCK_NONE`, but that disables safety filtering
-  entirely.
+**Deployment fails on Render with `better-sqlite3` error**
+→ Pin Node version to `22.x` in `package.json`:
+```json
+"engines": { "node": "22.x" }
+```
+
+**Data resets on Render restart**
+→ Known free-tier limitation (ephemeral filesystem). Migration to Turso (persistent cloud SQLite) coming soon.
 
 ---
 
-## Notes for the C++ developer 👋
+## 🚀 Deployment (Render)
 
-A few mental models that helped me write this assuming a C++
-background:
+1. Push your code to GitHub
+2. Sign up at [render.com](https://render.com)
+3. Click **New +** → **Web Service**
+4. Connect your GitHub repo
+5. Configure:
+   - **Runtime:** Node
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Instance Type:** Free
+6. Add environment variables:
+   - `COHERE_API_KEY`
+   - `SESSION_SECRET`
+   - `NODE_ENV=production`
+7. Deploy 🎉
 
-| Web concept        | C++ analogy                                |
-|--------------------|--------------------------------------------|
-| Express middleware | A chain of function decorators             |
-| `req` / `res`      | Function args (input) + out-parameters     |
-| `async` / `await`  | `std::future` but cleaner syntax           |
-| `JSON.parse/stringify` | `nlohmann::json` parse / dump         |
-| `better-sqlite3`   | A synchronous wrapper around SQLite C API  |
-| `fetch()` in JS    | `libcurl` with a Promise-based callback    |
-| `req.session`      | A `std::unordered_map` keyed by cookie id  |
-| `bcrypt.hash`      | A one-way hash function (no decryption)    |
-| Middleware chain   | `funcA(funcB(funcC(handler(req,res))))`    |
-# Personal-Ai
+Your app will be live at `https://your-app-name.onrender.com`
+
+---
+
+## 📚 Notes for C++ Developers 👋
+
+Mental models that helped me build this coming from a C++ background:
+
+| Web concept            | C++ analogy                                |
+|------------------------|--------------------------------------------|
+| Express middleware     | A chain of function decorators             |
+| `req` / `res`          | Function args (input) + out-parameters     |
+| `async` / `await`      | `std::future` but cleaner syntax           |
+| `JSON.parse/stringify` | `nlohmann::json` parse / dump              |
+| `better-sqlite3`       | A synchronous wrapper around SQLite C API  |
+| `fetch()` in JS        | `libcurl` with a Promise-based callback    |
+| `req.session`          | A `std::unordered_map` keyed by cookie id  |
+| `bcrypt.hash`          | A one-way hash function (no decryption)    |
+| Middleware chain       | `funcA(funcB(funcC(handler(req,res))))`    |
+
+---
+
+## 🗺 Roadmap
+
+- [ ] **Turso migration** — persistent cloud database (this weekend)
+- [ ] Chat history export (JSON/PDF)
+- [ ] Voice input support
+- [ ] Multi-conversation threads
+- [ ] Profile export/import
+- [ ] Dark/light theme toggle
+- [ ] Docker containerization
+
+---
+
+## 📄 License
+
+MIT — feel free to fork, modify, and learn from this project.
+
+---
+
+## 👨‍💻 About the Developer
+
+Built by **Avinash Shukla** — 2nd year CSE student at JUET, Guna.
+
+- 🌐 Portfolio: [avinashukla960.github.io/Avinash-Shukla](https://avinashukla960.github.io/Avinash-Shukla/)
+- 💼 LinkedIn: [linkedin.com/in/avinash-shukla960](https://www.linkedin.com/in/avinash-shukla960/)
+- 🐙 GitHub: [@Avinashukla960](https://github.com/Avinashukla960)
+
+**Honest disclosure:** This project was built with AI-assisted development. I owned the architecture, debugged real production issues, and shipped end-to-end. AI helped me learn faster — it didn't replace the learning.
+
+---
+
+*Star ⭐ this repo if you found it useful or want to see the Turso migration when it drops.*
