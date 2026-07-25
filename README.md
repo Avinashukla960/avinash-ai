@@ -4,7 +4,6 @@ A full-stack personal AI assistant where every user signs up with a personal pro
 
 **🔗 Live Demo:** [avinash-ai.onrender.com](https://avinash-ai.onrender.com)
 
-> ⚠️ Live on Render free tier — first load may take 30–60 seconds after inactivity. Data persistence via Turso migration coming soon.
 
 ---
 
