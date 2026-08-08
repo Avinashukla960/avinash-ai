@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Meet avinash.ai — the profile-aware, hyper-personalized personal AI assistant that remembers your preferences, goals, and context without repetitive prompts." />
+  <title>avinash.ai — The Profile-Aware Personal AI Assistant</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    /* =====================================================================
+       Landing Page CSS (Self-Contained Styles)
+       ===================================================================== */
+    .landing-body {
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .landing-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 15, 16, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    .landing-nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.15s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-elev-2);
+      border-color: var(--border-hover);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(167, 139, 250, 0.2);
+      transition: all 0.15s ease;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(167, 139, 250, 0.3);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-glow-container {
+      position: absolute;
+      top: -150px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.12) 0%, rgba(91, 141, 239, 0.05) 50%, transparent 100%);
+      z-index: -1;
+      pointer-events: none;
+      filter: blur(60px);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .badge-pill:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, #ffffff 30%, #e2d9ff 70%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.6;
+      margin: 0 auto 36px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 60px;
+    }
+
+    .btn-large {
+      padding: 12px 28px;
+      font-size: 15px;
+    }
+
+    /* Interactive Preview Box */
+    .preview-window {
+      width: 100%;
+      max-width: 800px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      overflow: hidden;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      height: 480px;
+    }
+
+    .window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(24, 24, 27, 0.5);
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #333;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .window-title {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .window-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .preview-sidebar {
+      width: 220px;
+      border-right: 1px solid var(--border);
+      background: rgba(18, 18, 20, 0.4);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .preview-chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(15, 15, 16, 0.2);
+    }
+
+    .preview-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .preview-interactive-prompts {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-elev);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .prompt-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .prompt-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .btn-prompt {
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-prompt:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: rgba(167, 139, 250, 0.05);
+    }
+
+    .btn-prompt.active {
+      border-color: var(--accent);
+      color: var(--text);
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    /* Features Section */
+    .section-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .section-title-h2 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      max-width: 540px;
+      margin: 12px auto 0;
+      line-height: 1.5;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--bg-elev-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--accent);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Showcase Section */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .showcase-text-col {
+      text-align: left;
+    }
+
+    .showcase-visual-col {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+
+    /* Interactive Vault Showcase */
+    .vault-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .vault-title {
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .vault-badge {
+      font-size: 11px;
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(167, 139, 250, 0.2);
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .vault-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 120px;
+      align-content: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .vault-chip {
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .vault-chip-prefix {
+      color: var(--accent-2);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+    }
+
+    .vault-input-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .vault-input {
+      flex: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .vault-add-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .vault-add-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Pricing Card Component */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .pricing-card.popular {
+      border-color: var(--accent);
+      box-shadow: 0 0 24px rgba(167, 139, 250, 0.1);
+    }
+
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      right: 24px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pricing-header h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .pricing-header p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .pricing-price {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: baseline;
+    }
+
+    .price-period {
+      font-size: 14px;
+      color: var(--text-dim);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    .pricing-features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .pricing-feature-item {
+      font-size: 14px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-feature-icon {
+      color: var(--success);
+      font-weight: bold;
+    }
+
+    /* FAQS Accordion */
+    .faq-container {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .faq-trigger {
+      width: 100%;
+      padding: 20px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 15px;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease, padding 0.2s ease;
+      padding: 0 24px;
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .faq-item.active {
+      border-color: var(--border-hover);
+    }
+
+    .faq-item.active .faq-content {
+      max-height: 200px;
+      padding-bottom: 20px;
+    }
+
+    .faq-icon {
+      font-size: 18px;
+      color: var(--text-dim);
+      transition: transform 0.2s ease;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    /* Call to Action Banner */
+    .cta-banner {
+      background: linear-gradient(135deg, rgba(24, 24, 27, 0.9) 0%, rgba(16, 16, 18, 0.9) 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 60px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-top: 40px;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
+      filter: blur(40px);
+    }
+
+    .cta-banner h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .cta-banner p {
+      color: var(--text-muted);
+      font-size: 15px;
+      max-width: 500px;
+      margin: 0 auto 28px;
+      line-height: 1.5;
+    }
+
+    /* Landing Footer */
+    .landing-footer {
+      border-top: 1px solid var(--border);
+      background: #09090b;
+      padding: 48px 24px;
+      margin-top: 80px;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 24px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 960px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .showcase-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 42px; }
+      .landing-nav { flex-direction: column; gap: 16px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body class="landing-body">
+
+  <!-- ============================== -->
+  <!-- Navigation Header              -->
+  <!-- ============================== -->
+  <header class="landing-header">
+    <div class="landing-nav">
+      <div class="brand">
+        <div class="logo-mark">A</div>
+        <span>avinash.ai</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#showcase" class="nav-link">How It Works</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#faqs" class="nav-link">FAQs</a>
+      </nav>
+      <div class="nav-actions" id="nav-actions">
+        <!-- Will be dynamically filled by JS based on authentication state -->
+        <a href="/login.html" class="btn-secondary" id="nav-login-btn">Log In</a>
+        <a href="/signup.html" class="btn-primary" id="nav-signup-btn">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== -->
+  <!-- Hero Section                   -->
+  <!-- ============================== -->
+  <section class="hero-section">
+    <div class="hero-glow-container"></div>
+    
+    <a href="#features" class="badge-pill">
+      <span class="badge-dot"></span>
+      <span>Now powered by profile-aware LLMs</span>
+    </a>
+
+    <h1 class="hero-title">The AI Companion that<br>actually remembers you.</h1>
+    <p class="hero-subtitle">
+      Meet avinash.ai. A hyper-personalized assistant that retains your goals, preferences, and context over time. No instructions copy-pasted. No repeating yourself.
+    </p>
+
+    <div class="hero-ctas" id="hero-ctas">
+      <!-- Will be dynamically filled by JS -->
+      <a href="/signup.html" class="btn-primary btn-large" id="hero-primary-btn">Start Chatting Free</a>
+      <a href="#showcase" class="btn-secondary btn-large">See How It Works</a>
+    </div>
+
+    <!-- Interactive Mock Chat Window -->
+    <div class="preview-window">
+      <div class="window-header">
+        <div class="window-dots">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+        </div>
+        <div class="window-title">interactive-demo.sh — avinash.ai</div>
+        <div style="width: 52px;"></div>
+      </div>
+      <div class="window-body">
+        <!-- Simulator Sidebar -->
+        <div class="preview-sidebar">
+          <div class="brand" style="margin-bottom: 8px;">
+            <div class="logo-mark" style="width: 22px; height: 28px; font-size: 11px;">A</div>
+            <span style="font-size: 13px;">Vault Active</span>
+          </div>
+          <div style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 4px;">User Profile</div>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+              <span style="color: var(--accent); font-weight: 600;">Goal:</span> Train for 10K
+            </div>
+            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+              <span style="color: var(--accent); font-weight: 600;">Diet:</span> Vegetarian
+            </div>
+            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+              <span style="color: var(--accent); font-weight: 600;">Focus:</span> Learn Rust
+            </div>
+            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+              <span style="color: var(--accent); font-weight: 600;">Injury:</span> Sensitive knees
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulator Chat Area -->
+        <div class="preview-chat-area">
+          <div class="preview-messages" id="preview-messages">
+            <div class="bubble assistant">
+              Hi! Click one of the interactive prompts below to see how I dynamically adapt my responses using your profile context!
+            </div>
+          </div>
+          
+          <div class="preview-interactive-prompts">
+            <div class="prompt-label">Interactive Prompts (Try Clicking One):</div>
+            <div class="prompt-buttons">
+              <button class="btn-prompt" onclick="runDemo(1, this)">🏃 Plan my workout</button>
+              <button class="btn-prompt" onclick="runDemo(2, this)">🥑 Suggest a dinner</button>
+              <button class="btn-prompt" onclick="runDemo(3, this)">📈 Assess my goals</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Features Section               -->
+  <!-- ============================== -->
+  <section class="section-wrapper" id="features" style="border-top: 1px solid var(--border);">
+    <div class="section-header">
+      <span class="section-label">Features</span>
+      <h2 class="section-title-h2">Supercharged features for daily efficiency</h2>
+      <p class="section-desc">We built avinash.ai with state-of-the-art context window injection. Here's what makes it different from standard chatbots.</p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🧠</div>
+        <h3 class="feature-title">Persistent Memory</h3>
+        <p class="feature-text">
+          Our specialized backend extracts key insights from your chats—such as dietary goals, technical stack, or project milestones—and stores them securely.
+        </p>
+      </div>
+      <!-- Feature 2 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">🔒</div>
+        <h3 class="feature-title">Privacy-First Vault</h3>
+        <p class="feature-text">
+          Full control over your data. View, update, or completely purge individual memories in your dashboard at any time. Your profile is entirely your own.
+        </p>
+      </div>
+      <!-- Feature 3 -->
+      <div class="feature-card">
+        <div class="feature-icon-wrapper">⚡</div>
+        <h3 class="feature-title">No Prompt Fatigue</h3>
+        <p class="feature-text">
+          Skip the lengthy background preambles. Every single message you send is automatically enriched with the right memory slice so responses are hyper-relevant.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Showcase / Interactive Vault    -->
+  <!-- ============================== -->
+  <section class="section-wrapper" id="showcase" style="border-top: 1px solid var(--border); background: rgba(24, 24, 27, 0.2);">
+    <div class="showcase-grid">
+      
+      <div class="showcase-text-col">
+        <span class="section-label">Interactive Experience</span>
+        <h2 class="section-title-h2" style="margin-bottom: 20px;">Your Personal Memory Vault</h2>
+        <p class="section-desc" style="margin: 0 0 24px; text-align: left;">
+          Whenever you talk to avinash.ai, it identifies personal data and stores it in your profile.
+        </p>
+        <p class="section-desc" style="margin: 0 0 24px; text-align: left; color: var(--text-muted);">
+          <strong>Try it yourself on the right:</strong> Add custom notes to see how they instantly align in your personal knowledge vault!
+        </p>
+      </div>
+
+      <div class="showcase-visual-col">
+        <div class="vault-header">
+          <div class="vault-title">
+            <span style="color: var(--accent);">◉</span> Memory Vault (Preview)
+          </div>
+          <span class="vault-badge" id="vault-count">4 memories</span>
+        </div>
+
+        <div class="vault-list" id="vault-list">
+          <div class="vault-chip">
+            <span class="vault-chip-prefix">Tech Stack</span> Rust, Node.js
+          </div>
+          <div class="vault-chip">
+            <span class="vault-chip-prefix">Diet</span> Vegetarian
+          </div>
+          <div class="vault-chip">
+            <span class="vault-chip-prefix">Training</span> 10K Marathon
+          </div>
+          <div class="vault-chip">
+            <span class="vault-chip-prefix">Constraint</span> Sensitive knees
+          </div>
+        </div>
+
+        <div class="vault-input-group">
+          <input type="text" id="vault-input" class="vault-input" placeholder="e.g. Favorite drink is cold brew, No sugar..." onkeydown="if(event.key === 'Enter') addCustomMemory()" />
+          <button class="vault-add-btn" onclick="addCustomMemory()">+ Add</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Pricing Section                -->
+  <!-- ============================== -->
+  <section class="section-wrapper" id="pricing" style="border-top: 1px solid var(--border);">
+    <div class="section-header">
+      <span class="section-label">Simple Pricing</span>
+      <h2 class="section-title-h2">Choose your speed of assistant</h2>
+      <p class="section-desc">Personalization should be accessible. Start for free and upgrade as you grow.</p>
+    </div>
+
+    <div class="pricing-grid">
+      <!-- Hobby Plan -->
+      <div class="pricing-card">
+        <div class="pricing-header">
+          <h3>Hobbyist</h3>
+          <p>Perfect for exploring personal assistant capabilities.</p>
+        </div>
+        <div class="pricing-price">
+          $0 <span class="price-period">/ month</span>
+        </div>
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> 50 chat rounds per day
+          </li>
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> Full personalized Memory Vault
+          </li>
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> Persistent chat history
+          </li>
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> SQLite lightning-speed caching
+          </li>
+        </ul>
+        <a href="/signup.html" class="btn-secondary" style="text-align: center; font-weight:600;">Get Started Now</a>
+      </div>
+
+      <!-- Pro Plan -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">Most Popular</div>
+        <div class="pricing-header">
+          <h3>Pro Developer</h3>
+          <p>For power users who need high-frequency, long sessions.</p>
+        </div>
+        <div class="pricing-price">
+          $12 <span class="price-period">/ month</span>
+        </div>
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> Unlimited chats & higher tokens
+          </li>
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> Advanced memory extraction triggers
+          </li>
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> Dedicated server priority queues
+          </li>
+          <li class="pricing-feature-item">
+            <span class="pricing-feature-icon">✓</span> Early access to custom agent personas
+          </li>
+        </ul>
+        <a href="/signup.html" class="btn-primary" style="justify-content: center; font-weight:600;">Upgrade to Pro</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- FAQs Section                   -->
+  <!-- ============================== -->
+  <section class="section-wrapper" id="faqs" style="border-top: 1px solid var(--border);">
+    <div class="section-header">
+      <span class="section-label">Questions?</span>
+      <h2 class="section-title-h2">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-container">
+      <!-- FAQ 1 -->
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          How does the profile-aware memory work?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-content">
+          avinash.ai maintains a personalized profile database. When you discuss details about yourself, the system extracts critical pieces of information (like goals, programming languages, or medical restrictions) and saves them in your profile. On subsequent chats, this context is automatically fetched and sent with your query.
+        </div>
+      </div>
+      <!-- FAQ 2 -->
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Is my profile data secure?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-content">
+          Absolutely. Your safety and confidentiality are our highest priorities. All profiles and message histories are saved using individual table indices, hashed sessions, and encrypted connections. We never sell or share your conversational memory with any third-party marketing brokers.
+        </div>
+      </div>
+      <!-- FAQ 3 -->
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          Can I manually edit what the AI knows about me?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-content">
+          Yes! By navigating to the "Profile" tab inside the dashboard, you can view your entire raw database profile. You can edit any details, correct misunderstandings, or purge all records completely with a single click.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Call To Action Banner          -->
+  <!-- ============================== -->
+  <section class="section-wrapper" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="cta-banner">
+      <h2>Experience truly context-aware intelligence.</h2>
+      <p>Stop repeating yourself. Start building, planning, and achieving with an assistant that respects who you are.</p>
+      <a href="/signup.html" class="btn-primary btn-large" id="banner-primary-btn" style="display:inline-flex;">Get Started For Free →</a>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- Footer                         -->
+  <!-- ============================== -->
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="logo-mark">A</div>
+        <span>avinash.ai</span>
+      </div>
+      <div class="footer-links">
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#showcase" class="nav-link">How It Works</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 avinash.ai. Built with extreme customization.</span>
+      <span>Express • Node.js • SQLite • Cohere AI</span>
+    </div>
+  </footer>
+
+  <!-- ============================== -->
+  <!-- Landing Page Script Logic      -->
+  <!-- ============================== -->
+  <script>
+    // ------------------------------------------------------------
+    // Check Auth State Dynamically
+    // ------------------------------------------------------------
+    async function checkAuthState() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.user) {
+            // User is authenticated! Swap CTAs to go straight to App
+            const navActions = document.getElementById('nav-actions');
+            if (navActions) {
+              navActions.innerHTML = `
+                <span style="font-size:13px; color:var(--text-muted); display:inline-block; margin-right:4px;">${data.user.email}</span>
+                <a href="/chat.html" class="btn-primary">Go to Chat →</a>
+              `;
+            }
+
+            const heroCtas = document.getElementById('hero-ctas');
+            if (heroCtas) {
+              heroCtas.innerHTML = `
+                <a href="/chat.html" class="btn-primary btn-large">Launch Assistant →</a>
+                <a href="#showcase" class="btn-secondary btn-large">Explore Memory Vault</a>
+              `;
+            }
+
+            const bannerPrimaryBtn = document.getElementById('banner-primary-btn');
+            if (bannerPrimaryBtn) {
+              bannerPrimaryBtn.textContent = 'Go to Chat Assistant →';
+              bannerPrimaryBtn.href = '/chat.html';
+            }
+          }
+        }
+      } catch (err) {
+        console.log('User not logged in or endpoint error:', err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', checkAuthState);
+
+    // ------------------------------------------------------------
+    // FAQ Accordion Handler
+    // ------------------------------------------------------------
+    function toggleFaq(btn) {
+      const item = btn.parentElement;
+      const isActive = item.classList.contains('active');
+      
+      // Close all FAQs first
+      document.querySelectorAll('.faq-item').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      // Toggle current FAQ
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    }
+
+    // ------------------------------------------------------------
+    // Interactive Chat Simulator
+    // ------------------------------------------------------------
+    const simulatedAnswers = {
+      1: "Since you're training for a **10K marathon** and prefer **low-impact joint exercises**, here is a customized plan:\n\n• **Monday:** 45-min Zone 2 Run + Core focus\n• **Wednesday:** Swimming or Elliptical (low impact) + stretching\n• **Friday:** 5K tempo run + strength training\n\nI've excluded high-impact plyometrics to respect your sensitive knees notes!",
+      2: "Based on your **vegetarian diet** and preference for **quick, under-30-minute meals**, how about a **Garlic Tomato Chickpea Skillet**?\n\nIt's packed with plant-based protein, requires just one pan, and takes exactly 20 minutes to cook. I made sure to exclude dairy as per your profile settings!",
+      3: "You're making great progress! Looking at your profile logs, you have completed **4/5 of your milestones** for this quarter's coding goals (specifically your Rust project!). Next up is setting up the database connection. Let's tackle that together whenever you're ready!"
+    };
+
+    let typingInterval = null;
+
+    function runDemo(index, btn) {
+      // Clear interval if running
+      if (typingInterval) clearInterval(typingInterval);
+
+      // Highlight active button
+      document.querySelectorAll('.btn-prompt').forEach(el => {
+        el.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      const messagesContainer = document.getElementById('preview-messages');
+      messagesContainer.innerHTML = ''; // Reset chat UI
+
+      // Step 1: Append User Prompt
+      const userText = btn.textContent.replace(/[🏃🥑📈]/g, '').trim();
+      const userBubble = document.createElement('div');
+      userBubble.className = 'bubble user';
+      userBubble.textContent = userText;
+      messagesContainer.appendChild(userBubble);
+
+      // Scroll to bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      // Step 2: Show Thinking Bubble
+      setTimeout(() => {
+        const thinkingBubble = document.createElement('div');
+        thinkingBubble.className = 'bubble assistant pending';
+        thinkingBubble.textContent = 'avinash.ai is processing...';
+        messagesContainer.appendChild(thinkingBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Step 3: Stream Reply
+        setTimeout(() => {
+          thinkingBubble.remove();
+          
+          const replyBubble = document.createElement('div');
+          replyBubble.className = 'bubble assistant';
+          messagesContainer.appendChild(replyBubble);
+
+          const fullText = simulatedAnswers[index];
+          let currentCharIndex = 0;
+          
+          typingInterval = setInterval(() => {
+            if (currentCharIndex < fullText.length) {
+              // Very basic HTML converter/renderer for typewriter bolding
+              const chunk = fullText.slice(0, currentCharIndex + 1);
+              // Simple markdown replacement for **text**
+              const formatted = chunk
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/•/g, '&bull;');
+              
+              replyBubble.innerHTML = formatted;
+              currentCharIndex++;
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            } else {
+              clearInterval(typingInterval);
+            }
+          }, 15); // Fast typing pace
+
+        }, 1200);
+
+      }, 500);
+    }
+
+    // ------------------------------------------------------------
+    // Interactive Showcase Memory Vault
+    // ------------------------------------------------------------
+    const defaultCategories = ['Preference', 'Favorite', 'Hobby', 'Stack', 'Diet', 'Goal'];
+
+    function addCustomMemory() {
+      const input = document.getElementById('vault-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const list = document.getElementById('vault-list');
+      const countEl = document.getElementById('vault-count');
+
+      // Randomly pick a prefix tag to simulate LLM categorizing information
+      const randomPrefix = defaultCategories[Math.floor(Math.random() * defaultCategories.length)];
+
+      const chip = document.createElement('div');
+      chip.className = 'vault-chip';
+      chip.style.borderColor = 'var(--success)';
+      chip.innerHTML = `
+        <span class="vault-chip-prefix" style="color:var(--success);">${randomPrefix}</span> ${text}
+      `;
+
+      // Prepend to vault list so user sees it instantly at the front
+      list.insertBefore(chip, list.firstChild);
+
+      // Reset input
+      input.value = '';
+
+      // Update count
+      const activeChipsCount = list.querySelectorAll('.vault-chip').length;
+      countEl.textContent = `${activeChipsCount} memories`;
+
+      // Clear green success border after 1.5s
+      setTimeout(() => {
+        chip.style.borderColor = '';
+        chip.querySelector('.vault-chip-prefix').style.color = '';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

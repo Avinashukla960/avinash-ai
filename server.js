@@ -90,13 +90,9 @@ app.use('/api/auth',    authRoutes);    // /api/auth/signup, /api/auth/login, et
 app.use('/api/chat',    chatRoutes);    // /api/chat, /api/chat/history
 app.use('/api/profile', profileRoutes); // /api/profile (GET, PUT)
 
-// Root route: redirect to chat if logged in, otherwise to login.
+// Root route: serve the modern landing page.
 app.get('/', (req, res) => {
-  if (req.session && req.session.userId) {
-    res.redirect('/chat.html');
-  } else {
-    res.redirect('/login.html');
-  }
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 404 fallback for any unknown API route.
