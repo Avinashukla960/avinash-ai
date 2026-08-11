@@ -85,16 +85,19 @@ body.app-body {
 .logo-mark {
   width: 28px;
   height: 28px;
-  background: #0a0a0a;
-  border: 1.5px solid var(--text);
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: #fff;
-  font-size: 14px;
+  border: 1px solid var(--border);
+  display: block;
+  object-fit: cover;
   flex-shrink: 0;
+}
+
+.welcome-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  margin-bottom: 18px;
 }
 
 .icon-btn {
