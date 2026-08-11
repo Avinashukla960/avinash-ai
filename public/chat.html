@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>avinash.ai</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body class="app-body">
@@ -13,7 +14,7 @@
   <aside class="sidebar">
     <div class="sidebar-header">
       <div class="brand">
-        <div class="logo-mark">A</div>
+        <img class="logo-mark" src="/logo.svg" alt="avinash.ai" />
         <span>avinash.ai</span>
       </div>
       <button class="icon-btn" id="new-chat-btn" title="Refresh">↻</button>
@@ -104,6 +105,7 @@
     function showWelcome() {
       messagesEl.innerHTML = `
         <div class="welcome">
+          <img class="welcome-logo" src="/logo.svg" alt="" />
           <h1>avinash.ai</h1>
           <p>Your personal AI assistant that already knows you — your goals,
              your health notes, your preferences. Ask me anything.</p>
@@ -212,7 +214,7 @@
       });
       if (target) {
         target.style.transition = 'background 0.3s';
-        target.style.background = 'rgba(167, 139, 250, 0.15)';
+        target.style.background = 'rgba(255, 255, 255, 0.12)';
         setTimeout(() => { target.style.background = ''; }, 800);
       }
     }

@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>avinash.ai — AI Assistant By Avinash Shukla</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <link rel="stylesheet" href="/styles.css" />
   <meta name="author" content="Avinash Shukla">
 
@@ -49,7 +50,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      background: rgba(15, 15, 16, 0.8);
+      background: rgba(5, 5, 5, 0.85);
       transition: all 0.3s ease;
     }
 
@@ -104,24 +105,25 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #fff;
+      background: var(--accent);
+      color: var(--on-accent);
       padding: 8px 18px;
       border-radius: 8px;
       text-decoration: none;
       font-size: 14px;
       font-weight: 600;
-      box-shadow: 0 4px 12px rgba(167, 139, 250, 0.2);
+      box-shadow: none;
       transition: all 0.15s ease;
       border: none;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
+      gap: 8px;
     }
 
     .btn-primary:hover {
+      background: var(--accent-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(167, 139, 250, 0.3);
     }
 
     /* Hero Section */
@@ -143,7 +145,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       transform: translateX(-50%);
       width: 600px;
       height: 400px;
-      background: radial-gradient(circle, rgba(167, 139, 250, 0.12) 0%, rgba(91, 141, 239, 0.05) 50%, transparent 100%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
       z-index: -1;
       pointer-events: none;
       filter: blur(60px);
@@ -170,32 +172,23 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       color: var(--text);
     }
 
-    .badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    .badge-bolt {
+      display: inline-flex;
+      color: var(--text);
     }
 
     .hero-title {
-      font-size: 56px;
+      font-size: 64px;
       font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -0.03em;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
       max-width: 800px;
       margin: 0 auto 24px;
-      background: linear-gradient(135deg, #ffffff 30%, #e2d9ff 70%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #ffffff;
+    }
+
+    .hero-title .muted {
+      color: #87878d;
     }
 
     .hero-subtitle {
@@ -229,7 +222,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       text-align: left;
       display: flex;
       flex-direction: column;
-      height: 480px;
+      height: 540px;
     }
 
     .window-header {
@@ -334,15 +327,15 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
     }
 
     .btn-prompt:hover {
-      border-color: var(--accent);
+      border-color: var(--border-hover);
       color: var(--text);
-      background: rgba(167, 139, 250, 0.05);
+      background: rgba(255, 255, 255, 0.04);
     }
 
     .btn-prompt.active {
-      border-color: var(--accent);
+      border-color: var(--border-hover);
       color: var(--text);
-      background: rgba(167, 139, 250, 0.1);
+      background: rgba(255, 255, 255, 0.07);
     }
 
     /* Features Section */
@@ -358,7 +351,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
     }
 
     .section-label {
-      color: var(--accent);
+      color: var(--text-muted);
       font-size: 13px;
       font-weight: 600;
       text-transform: uppercase;
@@ -483,9 +476,9 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
 
     .vault-badge {
       font-size: 11px;
-      background: rgba(167, 139, 250, 0.1);
-      color: var(--accent);
-      border: 1px solid rgba(167, 139, 250, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid var(--border-hover);
       padding: 2px 8px;
       border-radius: 99px;
     }
@@ -540,7 +533,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
 
     .vault-add-btn {
       background: var(--accent);
-      color: white;
+      color: var(--on-accent);
       border: none;
       border-radius: 8px;
       padding: 8px 14px;
@@ -576,8 +569,8 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
     }
 
     .pricing-card.popular {
-      border-color: var(--accent);
-      box-shadow: 0 0 24px rgba(167, 139, 250, 0.1);
+      border-color: var(--border-hover);
+      box-shadow: 0 0 24px rgba(255, 255, 255, 0.06);
     }
 
     .popular-badge {
@@ -585,7 +578,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       top: -12px;
       right: 24px;
       background: var(--accent);
-      color: #fff;
+      color: var(--on-accent);
       font-size: 11px;
       font-weight: 700;
       padding: 4px 12px;
@@ -725,7 +718,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       right: -100px;
       width: 300px;
       height: 300px;
-      background: radial-gradient(circle, rgba(167, 139, 250, 0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.07) 0%, transparent 70%);
       filter: blur(40px);
     }
 
@@ -784,6 +777,69 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       color: var(--text-dim);
     }
 
+    /* Monochrome profile cards in the demo sidebar */
+    .pv-vault-head { display: flex; flex-direction: column; gap: 6px; }
+    .pv-sync { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); }
+    .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px rgba(34, 197, 94, 0.5); }
+    .pv-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-elev-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .pv-card .mono-emoji { font-size: 14px; }
+    .pv-label { font-size: 11px; font-weight: 600; color: var(--text); }
+    .pv-value { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    /* Plan cards inside the demo chat */
+    .plan-cards { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+    .plan-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-elev);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      white-space: normal;
+    }
+    .plan-card .mono-emoji { font-size: 16px; }
+    .plan-day { font-size: 13px; font-weight: 600; color: var(--text); }
+    .plan-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Button adornments */
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; }
+    .btn-arrow { font-weight: 700; }
+    .btn-play {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      font-size: 7px;
+    }
+
+    /* Creator block in footer */
+    #creator {
+      margin-top: 40px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 1200px;
+    }
+    #creator h2 { color: var(--text); font-size: 18px; margin: 0 0 8px; }
+    #creator h3 { color: var(--text); font-size: 15px; margin: 0 0 8px; }
+    .creator-links { margin-top: 16px; display: flex; gap: 20px; }
+    .creator-links a { color: var(--text-muted); text-decoration: none; }
+    .creator-links a:hover { color: var(--text); }
+
     @media (max-width: 960px) {
       .features-grid { grid-template-columns: 1fr; }
       .showcase-grid { grid-template-columns: 1fr; }
@@ -802,7 +858,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
   <header class="landing-header">
     <div class="landing-nav">
       <div class="brand">
-        <div class="logo-mark">A</div>
+        <img class="logo-mark" src="/logo.svg" alt="avinash.ai" />
         <span>avinash.ai</span>
       </div>
       <nav class="nav-links">
@@ -826,19 +882,19 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
     <div class="hero-glow-container"></div>
     
     <a href="#features" class="badge-pill">
-      <span class="badge-dot"></span>
+      <span class="badge-bolt"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
       <span>Now powered by profile-aware LLMs</span>
     </a>
 
-    <h1 class="hero-title">The AI Companion that<br>actually remembers you.</h1>
+    <h1 class="hero-title">The AI Companion that<br>actually <span class="muted">remembers</span> you.</h1>
     <p class="hero-subtitle">
       Meet avinash.ai. A hyper-personalized assistant that retains your goals, preferences, and context over time. No instructions copy-pasted. No repeating yourself.
     </p>
 
     <div class="hero-ctas" id="hero-ctas">
       <!-- Will be dynamically filled by JS -->
-      <a href="/signup.html" class="btn-primary btn-large" id="hero-primary-btn">Start Chatting Free</a>
-      <a href="#showcase" class="btn-secondary btn-large">See How It Works</a>
+      <a href="/signup.html" class="btn-primary btn-large" id="hero-primary-btn">Start Chatting Free <span class="btn-arrow">→</span></a>
+      <a href="#showcase" class="btn-secondary btn-large">See How It Works <span class="btn-play">▶</span></a>
     </div>
 
     <!-- Interactive Mock Chat Window -->
@@ -849,29 +905,36 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
           <div class="dot yellow"></div>
           <div class="dot green"></div>
         </div>
-        <div class="window-title">interactive-demo.sh — avinash.ai</div>
+        <div class="window-title"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -1px; margin-right: 6px;" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>interactive-demo.sh — avinash.ai</div>
         <div style="width: 52px;"></div>
       </div>
       <div class="window-body">
         <!-- Simulator Sidebar -->
         <div class="preview-sidebar">
-          <div class="brand" style="margin-bottom: 8px;">
-            <div class="logo-mark" style="width: 22px; height: 28px; font-size: 11px;">A</div>
-            <span style="font-size: 13px;">Vault Active</span>
+          <div class="pv-vault-head">
+            <div class="brand">
+              <img class="logo-mark" style="width: 24px; height: 24px; border-radius: 6px;" src="/logo.svg" alt="" />
+              <span style="font-size: 13px;">Vault Active</span>
+            </div>
+            <div class="pv-sync"><span class="sync-dot"></span> All systems synced</div>
           </div>
           <div style="font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 4px;">User Profile</div>
           <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
-            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
-              <span style="color: var(--accent); font-weight: 600;">Goal:</span> Train for 10K
+            <div class="pv-card">
+              <span class="mono-emoji">🎯</span>
+              <div><div class="pv-label">Goal</div><div class="pv-value">Train for 10K marathon</div></div>
             </div>
-            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
-              <span style="color: var(--accent); font-weight: 600;">Diet:</span> Vegetarian
+            <div class="pv-card">
+              <span class="mono-emoji">🥬</span>
+              <div><div class="pv-label">Diet</div><div class="pv-value">Vegetarian</div></div>
             </div>
-            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
-              <span style="color: var(--accent); font-weight: 600;">Focus:</span> Learn Rust
+            <div class="pv-card">
+              <span class="mono-emoji">🧠</span>
+              <div><div class="pv-label">Focus</div><div class="pv-value">Learn Rust</div></div>
             </div>
-            <div style="background: var(--bg-elev-2); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
-              <span style="color: var(--accent); font-weight: 600;">Injury:</span> Sensitive knees
+            <div class="pv-card">
+              <span class="mono-emoji">⏰</span>
+              <div><div class="pv-label">Available Time</div><div class="pv-value">6–7 AM • Weekdays</div></div>
             </div>
           </div>
         </div>
@@ -879,17 +942,31 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
         <!-- Simulator Chat Area -->
         <div class="preview-chat-area">
           <div class="preview-messages" id="preview-messages">
-            <div class="bubble assistant">
-              Hi! Click one of the interactive prompts below to see how I dynamically adapt my responses using your profile context!
+            <div class="bubble user">Plan my workout</div>
+            <div class="bubble assistant">Since you're training for a <strong>10K marathon</strong> and prefer <strong>low-impact</strong> joint exercises, here is a customized plan:
+              <div class="plan-cards">
+                <div class="plan-card">
+                  <span class="mono-emoji">🏃</span>
+                  <div><div class="plan-day">Monday</div><div class="plan-desc">45-min Zone 2 Run + Core focus</div></div>
+                </div>
+                <div class="plan-card">
+                  <span class="mono-emoji">🏊</span>
+                  <div><div class="plan-day">Wednesday</div><div class="plan-desc">Swimming or Elliptical (low impact) + stretching</div></div>
+                </div>
+                <div class="plan-card">
+                  <span class="mono-emoji">🏋️</span>
+                  <div><div class="plan-day">Friday</div><div class="plan-desc">Strength training (lower body) + mobility</div></div>
+                </div>
+              </div>
             </div>
           </div>
           
           <div class="preview-interactive-prompts">
             <div class="prompt-label">Interactive Prompts (Try Clicking One):</div>
             <div class="prompt-buttons">
-              <button class="btn-prompt" onclick="runDemo(1, this)">🏃 Plan my workout</button>
-              <button class="btn-prompt" onclick="runDemo(2, this)">🥑 Suggest a dinner</button>
-              <button class="btn-prompt" onclick="runDemo(3, this)">📈 Assess my goals</button>
+              <button class="btn-prompt" onclick="runDemo(1, this)"><span class="mono-emoji">🏃</span> Plan my workout</button>
+              <button class="btn-prompt" onclick="runDemo(2, this)"><span class="mono-emoji">🥑</span> Suggest a dinner</button>
+              <button class="btn-prompt" onclick="runDemo(3, this)"><span class="mono-emoji">📈</span> Assess my goals</button>
             </div>
           </div>
         </div>
@@ -910,7 +987,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
     <div class="features-grid">
       <!-- Feature 1 -->
       <div class="feature-card">
-        <div class="feature-icon-wrapper">🧠</div>
+        <div class="feature-icon-wrapper"><span class="mono-emoji">🧠</span></div>
         <h3 class="feature-title">Persistent Memory</h3>
         <p class="feature-text">
           Our specialized backend extracts key insights from your chats—such as dietary goals, technical stack, or project milestones—and stores them securely.
@@ -918,7 +995,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       </div>
       <!-- Feature 2 -->
       <div class="feature-card">
-        <div class="feature-icon-wrapper">🔒</div>
+        <div class="feature-icon-wrapper"><span class="mono-emoji">🔒</span></div>
         <h3 class="feature-title">Privacy-First Vault</h3>
         <p class="feature-text">
           Full control over your data. View, update, or completely purge individual memories in your dashboard at any time. Your profile is entirely your own.
@@ -926,7 +1003,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
       </div>
       <!-- Feature 3 -->
       <div class="feature-card">
-        <div class="feature-icon-wrapper">⚡</div>
+        <div class="feature-icon-wrapper"><span class="mono-emoji">⚡</span></div>
         <h3 class="feature-title">No Prompt Fatigue</h3>
         <p class="feature-text">
           Skip the lengthy background preambles. Every single message you send is automatically enriched with the right memory slice so responses are hyper-relevant.
@@ -1110,7 +1187,7 @@ content="Avinash AI — an AI assistant created by Avinash Shukla, a Computer Sc
   <footer class="landing-footer">
     <div class="footer-inner">
       <div class="footer-logo">
-        <div class="logo-mark">A</div>
+        <img class="logo-mark" src="/logo.svg" alt="avinash.ai" />
         <span>avinash.ai</span>
       </div>
       <div class="footer-links">
