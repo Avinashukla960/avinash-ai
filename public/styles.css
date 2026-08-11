@@ -1,39 +1,48 @@
 /* =====================================================================
-   styles.css — avinash.ai — modern dark UI inspired by Grok.
+   styles.css — avinash.ai — monochrome "obsidian" UI.
 
-   Design language:
-     - Dark theme (deep blacks + purple accent)
-     - Sidebar + main area layout for the chat
-     - iMessage-style bubbles but cleaner, less rounded
-     - Subtle gradients on the brand mark and welcome heading
-     - Smooth transitions on hover
+   Design language (matches the brand reference):
+     - Pure black backgrounds, near-black elevated surfaces
+     - Strictly monochrome: white text, gray muted text, hairline borders
+     - Primary actions: solid white buttons with black text
+     - Secondary actions: outlined dark buttons with white text
+     - Logo mark: black rounded square with a white outline + white "A"
+     - Subtle white glows only — no color accents
    ===================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --bg:           #0f0f10;
-  --bg-elev:      #18181b;
-  --bg-elev-2:    #1f1f23;
-  --border:       #27272a;
-  --border-hover: #3f3f46;
-  --text:         #fafafa;
-  --text-muted:   #a1a1aa;
-  --text-dim:     #71717a;
-  --accent:       #a78bfa;      /* purple, Grok-ish */
-  --accent-2:     #5b8def;      /* blue */
-  --accent-hover: #8b5cf6;
+  --bg:           #050505;
+  --bg-elev:      #0d0d0e;
+  --bg-elev-2:    #161618;
+  --border:       #232326;
+  --border-hover: #3d3d42;
+  --text:         #f5f5f5;
+  --text-muted:   #a2a2a8;
+  --text-dim:     #6f6f76;
+  --accent:       #ffffff;      /* monochrome accent = white */
+  --accent-2:     #d6d6da;
+  --accent-hover: #e6e6e9;
+  --on-accent:    #0a0a0a;      /* text on white buttons */
   --danger:       #ef4444;
-  --success:      #10b981;
+  --success:      #22c55e;
 }
 
 * { box-sizing: border-box; }
 html, body {
   margin: 0;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-               "Inter", "Helvetica Neue", sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "Helvetica Neue", sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Force any emoji glyphs used as icons to render monochrome/white. */
+.mono-emoji {
+  filter: grayscale(1) brightness(1.9);
 }
 
 /* =====================================================================
@@ -70,12 +79,14 @@ body.app-body {
   font-weight: 600;
   font-size: 15px;
   letter-spacing: -0.01em;
+  color: var(--text);
 }
 
 .logo-mark {
   width: 28px;
   height: 28px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  background: #0a0a0a;
+  border: 1.5px solid var(--text);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -83,7 +94,7 @@ body.app-body {
   font-weight: 700;
   color: #fff;
   font-size: 14px;
-  box-shadow: 0 2px 8px rgba(167, 139, 250, 0.25);
+  flex-shrink: 0;
 }
 
 .icon-btn {
@@ -288,13 +299,13 @@ body.app-body {
 
 .welcome h1 {
   font-size: 38px;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 14px;
-  background: linear-gradient(135deg, #fafafa 0%, var(--accent) 100%);
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 30%, #84848b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  letter-spacing: -0.02em;
 }
 
 .welcome p {
@@ -327,7 +338,7 @@ body.app-body {
 }
 
 .suggestion:hover {
-  border-color: var(--accent);
+  border-color: var(--border-hover);
   color: var(--text);
   transform: translateY(-1px);
 }
@@ -388,8 +399,8 @@ body.app-body {
 }
 
 .composer:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 .composer textarea {
@@ -413,7 +424,7 @@ body.app-body {
 
 .send-btn {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border: none;
   width: 36px;
   height: 36px;
@@ -435,6 +446,7 @@ body.app-body {
 
 .send-btn:disabled {
   background: var(--border);
+  color: var(--text-dim);
   cursor: not-allowed;
   transform: none;
 }
@@ -458,7 +470,9 @@ body.app-body {
   justify-content: center;
   min-height: 100vh;
   padding: 24px;
-  background: var(--bg);
+  background:
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(255, 255, 255, 0.05), transparent 70%),
+    var(--bg);
 }
 
 .auth-card {
@@ -485,7 +499,8 @@ body.app-body {
 .auth-card h1 {
   margin: 0 0 6px;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .auth-card .subtitle {
@@ -530,8 +545,8 @@ input::placeholder, textarea::placeholder {
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.12);
+  border-color: var(--border-hover);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 textarea {
@@ -543,7 +558,7 @@ button.primary {
   width: 100%;
   padding: 12px;
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border: none;
   border-radius: 10px;
   font: inherit;
@@ -639,6 +654,7 @@ button.primary:disabled {
 .profile-card h1 {
   margin: 0 0 6px;
   font-size: 22px;
+  letter-spacing: -0.02em;
 }
 
 .profile-card .subtitle {
