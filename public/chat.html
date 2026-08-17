@@ -87,11 +87,67 @@
     const historyEl  = document.getElementById('history-list');
     const sendBtn    = formEl.querySelector('.send-btn');
 
+    // Escape HTML special characters so untrusted text can be embedded safely.
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Minimal markdown renderer for assistant replies (bold, italics,
+    // inline code, fenced code blocks, headings, lists and links).
+    function renderMarkdown(src) {
+      const codeBlocks = [];
+      src = src.replace(/```[\w-]*\n?([\s\S]*?)```/g, (m, code) => {
+        codeBlocks.push(code.replace(/\n$/, ''));
+        return '\u0000CB' + (codeBlocks.length - 1) + '\u0000';
+      });
+      let html = escapeHtml(src);
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, '$1<em>$2</em>');
+      html = html.replace(/(^|[^_\w])_([^_\n]+)_(?!\w)/g, '$1<em>$2</em>');
+      html = html.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      html = html
+        .replace(/^#{1,2}\s+(.*)$/gm, '<h3>$1</h3>')
+        .replace(/^#{3,6}\s+(.*)$/gm, '<h4>$1</h4>');
+      const lines = html.split('\n');
+      const out = [];
+      let list = null;
+      const closeList = () => { if (list) { out.push('</' + list + '>'); list = null; } };
+      for (const line of lines) {
+        const ul = line.match(/^\s*[-*]\s+(.*)$/);
+        const ol = line.match(/^\s*\d+[.)]\s+(.*)$/);
+        if (ul || ol) {
+          const want = ul ? 'ul' : 'ol';
+          if (list !== want) { closeList(); out.push('<' + want + '>'); list = want; }
+          out.push('<li>' + (ul || ol)[1] + '</li>');
+        } else { closeList(); out.push(line); }
+      }
+      closeList();
+      html = out.join('\n');
+      html = html.replace(/\n/g, '<br>');
+      html = html
+        .replace(/<br>(<\/?(?:ul|ol|li|h3|h4)[^>]*>)/g, '$1')
+        .replace(/(<\/?(?:ul|ol|li|h3|h4)[^>]*>)<br>/g, '$1');
+      html = html.replace(/\u0000CB(\d+)\u0000/g, (m, i) =>
+        '<pre class="code-block"><code>' + escapeHtml(codeBlocks[+i]) + '</code></pre>');
+      html = html
+        .replace(/<br>(<pre[^>]*>)/g, '$1')
+        .replace(/(<\/pre>)<br>/g, '$1');
+      return html;
+    }
+
     // Render a single chat bubble.
     function addMessage(role, content, scroll = true) {
       const div = document.createElement('div');
-      div.className = 'bubble ' + (role === 'user' ? 'user' : 'assistant');
-      div.textContent = content;
+      if (role === 'user') {
+        div.className = 'bubble user';
+        div.textContent = content;
+      } else {
+        div.className = 'bubble assistant md';
+        div.innerHTML = renderMarkdown(content);
+      }
       div.dataset.role = role;
       messagesEl.appendChild(div);
       if (scroll) {
