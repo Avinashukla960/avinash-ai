@@ -79,6 +79,8 @@
     //     to that message in the main area.
     //   - On submit, POST the message to /api/chat, render the
     //     assistant's reply when it comes back.
+    //   - Every assistant reply has a Copy button; fenced code blocks
+    //     inside replies get their own Copy button on hover.
     // ------------------------------------------------------------
 
     const messagesEl = document.getElementById('messages');
@@ -131,8 +133,13 @@
         .replace(/<br>(<\/?(?:ul|ol|li|h3|h4)[^>]*>)/g, '$1')
         .replace(/(<\/?(?:ul|ol|li|h3|h4)[^>]*>)<br>/g, '$1');
       html = html.replace(/\u0000CB(\d+)\u0000/g, (m, i) =>
-        '<pre class="code-block"><code>' + escapeHtml(codeBlocks[+i]) + '</code></pre>');
+        '<div class="code-block-wrap">' +
+          '<button type="button" class="code-copy" title="Copy code">Copy</button>' +
+          '<pre class="code-block"><code>' + escapeHtml(codeBlocks[+i]) + '</code></pre>' +
+        '</div>');
       html = html
+        .replace(/<br>(<div class="code-block-wrap">)/g, '$1')
+        .replace(/(<\/div>)<br>/g, '$1')
         .replace(/<br>(<pre[^>]*>)/g, '$1')
         .replace(/(<\/pre>)<br>/g, '$1');
       return html;
@@ -147,6 +154,14 @@
       } else {
         div.className = 'bubble assistant md';
         div.innerHTML = renderMarkdown(content);
+        // Copy button for the whole reply (copies the raw text).
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-btn';
+        copyBtn.type = 'button';
+        copyBtn.title = 'Copy reply';
+        copyBtn.textContent = 'Copy';
+        copyBtn.dataset.copyText = content;
+        div.appendChild(copyBtn);
       }
       div.dataset.role = role;
       messagesEl.appendChild(div);
@@ -156,6 +171,52 @@
       }
       return div;
     }
+
+    // Copy text to the clipboard (with a fallback for non-secure
+    // contexts), then give the clicked button "Copied ✓" feedback.
+    function copyToClipboard(text, btn) {
+      const flash = () => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        btn.classList.add('copied');
+        clearTimeout(btn._copyTimer);
+        btn._copyTimer = setTimeout(() => {
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1500);
+      };
+      const fallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (err) {}
+        ta.remove();
+        flash();
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(flash).catch(fallback);
+      } else {
+        fallback();
+      }
+    }
+
+    // One delegated listener handles every copy button: whole replies
+    // (.copy-btn, text stored in data-copy-text) and code blocks
+    // (.code-copy, text read from the adjacent <pre>).
+    messagesEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.copy-btn, .code-copy');
+      if (!btn) return;
+      let text = btn.dataset.copyText;
+      if (btn.classList.contains('code-copy')) {
+        const code = btn.closest('.code-block-wrap');
+        text = code ? code.querySelector('pre code').textContent : '';
+      }
+      if (text) copyToClipboard(text, btn);
+    });
 
     // Render the welcome screen (shown when there are no messages yet).
     function showWelcome() {
